@@ -3,7 +3,7 @@ import { shopifyClient, COUNTRY_CODE } from '../lib/shopify'
 import { SEARCH_PRODUCTS } from '../lib/queries'
 import { formatPrice } from '../lib/currency'
 
-export default function Navbar({ page, onNav, totalItems, onCartOpen, onViewProduct }) {
+export default function Navbar({ page, onNav, totalItems, onCartOpen, onViewProduct, customer, onLogin, onAccount }) {
   const [scrolled,      setScrolled]      = useState(false)
   const [menuOpen,      setMenuOpen]      = useState(false)
   const [searchOpen,    setSearchOpen]    = useState(false)
@@ -203,6 +203,14 @@ export default function Navbar({ page, onNav, totalItems, onCartOpen, onViewProd
           <div className="nav-right">
             <button className="nav-btn" onClick={() => setSearchOpen(true)}>Search</button>
             <div className="nav-sep"/>
+            {customer ? (
+              <button className="nav-btn" onClick={onAccount}>
+                {customer.firstName || 'Account'}
+              </button>
+            ) : (
+              <button className="nav-btn" onClick={onLogin}>Sign In</button>
+            )}
+            <div className="nav-sep"/>
             <button className="nav-btn" onClick={onCartOpen}>
               Cart {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
             </button>
@@ -261,6 +269,10 @@ export default function Navbar({ page, onNav, totalItems, onCartOpen, onViewProd
               {l.label}
             </button>
           ))}
+          <button className="mobile-menu-link" style={{fontSize:24,color:'var(--ink-xs)'}}
+            onClick={() => { customer ? onAccount() : onLogin(); setMenuOpen(false) }}>
+            {customer ? customer.firstName : 'Sign In'}
+          </button>
         </div>
       )}
     </>
