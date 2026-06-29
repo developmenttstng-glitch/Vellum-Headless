@@ -42,10 +42,10 @@ export default function Navbar({ page, onNav, totalItems, onCartOpen, onViewProd
   function closeSearch() { setSearchOpen(false); setQuery(''); setResults([]) }
 
   const links = [
-    { id:'home', label:'Home' },
-    { id:'shop', label:'Shop' },
-    { id:'collections', label:'Collections' },
-    { id:'about', label:'About' },
+    { id:'home',        path:'/',            label:'Home' },
+    { id:'shop',        path:'/shop',        label:'Shop' },
+    { id:'collections', path:'/collections', label:'Collections' },
+    { id:'about',       path:'/about',       label:'About' },
   ]
 
   return (
@@ -193,7 +193,7 @@ export default function Navbar({ page, onNav, totalItems, onCartOpen, onViewProd
           <div className="nav-links">
             {links.map(l => (
               <button key={l.id}
-                className={`nav-link ${page === l.id ? 'active' : ''}`}
+                className={`nav-link ${page === l.path || (l.path !== '/' && page.startsWith(l.path)) ? 'active' : ''}`}
                 onClick={() => onNav(l.id)}>
                 {l.label}
               </button>
