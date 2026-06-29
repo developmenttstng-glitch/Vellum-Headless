@@ -1,0 +1,248 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:    #ede8df;
+  --cream-dk: #e0d8cc;
+  --parch:    #e4ddd1;
+  --ink:      #1c1a16;
+  --ink-lt:   #6b6358;
+  --ink-xs:   #9a8e7e;
+  --wax:      #8b3a2a;
+  --sage:     #7a8e72;
+  --border:   #1c1a16;
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --type:     'Special Elite', 'Courier New', monospace;
+  --ease:     cubic-bezier(0.25, 0.1, 0.25, 1);
+  --slow:     cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif);
+  background: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { display: block; width: 100%; height: 100%; object-fit: cover; }
+button { cursor: pointer; font-family: inherit; }
+a { text-decoration: none; color: inherit; }
+
+.container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }
+@media (max-width: 768px) { .container { padding: 0 20px; } }
+
+/* ── Burn paper edge ── */
+/* Applied as a pseudo-element to section dividers */
+.burn-top {
+  position: relative;
+}
+.burn-top::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: 18px;
+  z-index: 2;
+  background: var(--cream);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='18'%3E%3Cpath d='M0 0 Q30 8 60 3 Q90 -2 120 6 Q150 14 180 4 Q210 -4 240 8 Q270 18 300 5 Q330 -3 360 9 Q390 17 420 3 Q450 -3 480 10 Q510 18 540 4 Q570 -2 600 7 Q630 16 660 2 Q690 -4 720 9 Q750 18 780 5 Q810 -2 840 8 Q870 17 900 3 Q930 -3 960 10 Q990 18 1020 4 Q1050 -2 1080 8 Q1110 16 1140 3 Q1170 -3 1200 6 L1200 18 L0 18Z' fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='18'%3E%3Cpath d='M0 0 Q30 8 60 3 Q90 -2 120 6 Q150 14 180 4 Q210 -4 240 8 Q270 18 300 5 Q330 -3 360 9 Q390 17 420 3 Q450 -3 480 10 Q510 18 540 4 Q570 -2 600 7 Q630 16 660 2 Q690 -4 720 9 Q750 18 780 5 Q810 -2 840 8 Q870 17 900 3 Q930 -3 960 10 Q990 18 1020 4 Q1050 -2 1080 8 Q1110 16 1140 3 Q1170 -3 1200 6 L1200 18 L0 18Z' fill='black'/%3E%3C/svg%3E");
+  mask-size: 100% 100%;
+}
+
+.burn-bottom {
+  position: relative;
+}
+.burn-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 18px;
+  z-index: 2;
+  background: var(--cream);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='18'%3E%3Cpath d='M0 18 Q30 10 60 15 Q90 20 120 12 Q150 4 180 14 Q210 22 240 10 Q270 0 300 13 Q330 21 360 9 Q390 1 420 15 Q450 21 480 8 Q510 0 540 14 Q570 20 600 11 Q630 2 660 16 Q690 22 720 9 Q750 0 780 13 Q810 20 840 10 Q870 2 900 15 Q930 21 960 8 Q990 0 1020 14 Q1050 20 1080 10 Q1110 2 1140 15 Q1170 21 1200 12 L1200 18 L0 18Z' fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='18'%3E%3Cpath d='M0 18 Q30 10 60 15 Q90 20 120 12 Q150 4 180 14 Q210 22 240 10 Q270 0 300 13 Q330 21 360 9 Q390 1 420 15 Q450 21 480 8 Q510 0 540 14 Q570 20 600 11 Q630 2 660 16 Q690 22 720 9 Q750 0 780 13 Q810 20 840 10 Q870 2 900 15 Q930 21 960 8 Q990 0 1020 14 Q1050 20 1080 10 Q1110 2 1140 15 Q1170 21 1200 12 L1200 18 L0 18Z' fill='black'/%3E%3C/svg%3E");
+  mask-size: 100% 100%;
+}
+
+/* Burned section — dark with torn edges */
+.burn-section {
+  background: var(--ink);
+  position: relative;
+}
+.burn-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 20px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+.burn-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Paper grain noise overlay */
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23noise)'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+/* Graph paper pattern */
+.graph-bg {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(28,26,22,0.06) 23px, rgba(28,26,22,0.06) 24px),
+    repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(28,26,22,0.06) 23px, rgba(28,26,22,0.06) 24px);
+}
+
+/* Dot grid pattern */
+.dot-bg {
+  background-image: radial-gradient(circle, rgba(28,26,22,0.1) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes marquee {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+@keyframes typewriter {
+  from { width:0; }
+  to   { width:100%; }
+}
+@keyframes blink {
+  0%,100% { opacity:1; }
+  50%      { opacity:0; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--slow), transform 0.8s var(--slow);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Buttons */
+.btn-ink {
+  padding: 14px 36px;
+  background: var(--ink);
+  color: var(--cream);
+  border: 1.5px solid var(--ink);
+  font-family: var(--type);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--wax);
+  transition: all 0.15s;
+  display: inline-block;
+}
+.btn-ink:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--wax); }
+
+.btn-ghost {
+  padding: 14px 36px;
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  font-family: var(--type);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+  transition: all 0.15s;
+  display: inline-block;
+}
+.btn-ghost:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(0,0,0,0.12); }
+
+.btn-cream {
+  padding: 14px 36px;
+  background: var(--cream);
+  color: var(--ink);
+  border: 1.5px solid var(--cream);
+  font-family: var(--type);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(255,255,255,0.15);
+  transition: all 0.15s;
+  display: inline-block;
+}
+.btn-cream:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(255,255,255,0.2); }
+
+/* Wax seal */
+.wax-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  background: var(--wax);
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  font-family: var(--type);
+  font-size: 12px;
+  color: var(--cream);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+  position: relative;
+  flex-shrink: 0;
+}
+.wax-seal::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255,255,255,0.2);
+}
+
+/* Rubber stamp badge */
+.stamp-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1.5px solid var(--wax);
+  font-family: var(--type);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--wax);
+  transform: rotate(-3deg);
+}
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--cream-dk) 25%, var(--parch) 50%, var(--cream-dk) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--ink-xs); }

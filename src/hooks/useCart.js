@@ -1,0 +1,61 @@
+import { useState } from 'react'
+import { shopifyClient, COUNTRY_CODE } from '../lib/shopify'
+import { CREATE_CART, ADD_CART_LINES, UPDATE_CART_LINES, REMOVE_CART_LINES } from '../lib/queries'
+
+export function useCart() {
+  const [cart,    setCart]    = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const lines      = cart?.lines?.edges?.map(e => e.node) || []
+  const totalItems = lines.reduce((s, l) => s + l.quantity, 0)
+  const totalPrice = cart ? parseFloat(cart.cost.totalAmount.amount).toFixed(2) : '0.00'
+  const currency   = cart?.cost?.totalAmount?.currencyCode || 'PHP'
+
+  async function addToCart(variantId, quantity = 1) {
+    setLoading(true)
+    try {
+      if (!cart) {
+        const { data } = await shopifyClient.request(CREATE_CART, {
+          variables: { lines: [{ merchandiseId: variantId, quantity }], country: COUNTRY_CODE },
+        })
+        setCart(data.cartCreate.cart)
+      } else {
+        const { data } = await shopifyClient.request(ADD_CART_LINES, {
+          variables: { cartId: cart.id, lines: [{ merchandiseId: variantId, quantity }], country: COUNTRY_CODE },
+        })
+        setCart(data.cartLinesAdd.cart)
+      }
+    } catch(err) { console.error(err) }
+    finally { setLoading(false) }
+  }
+
+  async function updateQuantity(lineId, quantity) {
+    if (!cart) return
+    setLoading(true)
+    try {
+      const { data } = await shopifyClient.request(UPDATE_CART_LINES, {
+        variables: { cartId: cart.id, lines: [{ id: lineId, quantity }], country: COUNTRY_CODE },
+      })
+      setCart(data.cartLinesUpdate.cart)
+    } catch(err) { console.error(err) }
+    finally { setLoading(false) }
+  }
+
+  async function removeLine(lineId) {
+    if (!cart) return
+    setLoading(true)
+    try {
+      const { data } = await shopifyClient.request(REMOVE_CART_LINES, {
+        variables: { cartId: cart.id, lineIds: [lineId], country: COUNTRY_CODE },
+      })
+      setCart(data.cartLinesRemove.cart)
+    } catch(err) { console.error(err) }
+    finally { setLoading(false) }
+  }
+
+  function goToCheckout() {
+    if (cart?.checkoutUrl) window.location.href = cart.checkoutUrl
+  }
+
+  return { cart, lines, totalItems, totalPrice, currency, loading, addToCart, updateQuantity, removeLine, goToCheckout }
+}
