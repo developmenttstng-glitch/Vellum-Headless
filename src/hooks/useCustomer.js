@@ -243,7 +243,7 @@ export function useCustomer() {
     setToken(null)
     setError(null)
     callbackRan.current = false
-    window.location.href = `${LOGOUT_URL}?post_logout_redirect_uri=${APP_URL}`
+    window.location.href = `${LOGOUT_URL}?post_logout_redirect_uri=${encodeURIComponent(APP_URL)}`
   }, [])
 
   return {
