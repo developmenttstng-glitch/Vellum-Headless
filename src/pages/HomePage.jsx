@@ -364,10 +364,19 @@ export default function HomePage({ products, collections, loading, onNav, onAddT
         .coll-card {
           padding: 40px 32px; border-right: 1.5px solid var(--ink);
           cursor: pointer; transition: background 0.2s; position: relative;
-          background: var(--cream);
+          background: var(--cream); overflow: hidden;
         }
         .coll-card:last-child { border-right: none; }
         .coll-card:hover { background: var(--cream-dk); }
+        .coll-card-img {
+          position: absolute; inset: 0; pointer-events: none;
+        }
+        .coll-card-img img {
+          width: 100%; height: 100%; object-fit: cover;
+          opacity: 0.08; transition: opacity 0.3s;
+        }
+        .coll-card:hover .coll-card-img img { opacity: 0.13; }
+        .coll-card-content { position: relative; z-index: 1; }
         .coll-num {
           font-family: var(--type); font-size: 10px; letter-spacing: 0.2em;
           color: var(--ink-xs); margin-bottom: 14px;
@@ -604,13 +613,20 @@ export default function HomePage({ products, collections, loading, onNav, onAddT
             {displayCollections.length > 0 ? displayCollections.map((col, i) => (
               <div className="coll-card" key={col.id}
                 onClick={() => onNav('collection', col.handle)}>
-                <div className="coll-num">0{i+1} / {col.title}</div>
-                <div className="coll-icon">{['◻','◇','○','◈'][i]}</div>
-                <div className="coll-name">{col.title}</div>
-                <div className="coll-desc">{col.description || 'Explore this collection.'}</div>
-                <div className="coll-link">Browse →</div>
-                {i === 0 && <div className="rubber-stamp">New<br/>Stock</div>}
-                {i === 3 && <div className="rubber-stamp">Best<br/>Seller</div>}
+                {col.image && (
+                  <div className="coll-card-img">
+                    <img src={col.image.url} alt={col.title}/>
+                  </div>
+                )}
+                <div className="coll-card-content">
+                  <div className="coll-num">0{i+1} / {col.title}</div>
+                  <div className="coll-icon">{['◻','◇','○','◈'][i]}</div>
+                  <div className="coll-name">{col.title}</div>
+                  <div className="coll-desc">{col.description || 'Explore this collection.'}</div>
+                  <div className="coll-link">Browse →</div>
+                  {i === 0 && <div className="rubber-stamp">New<br/>Stock</div>}
+                  {i === 3 && <div className="rubber-stamp">Best<br/>Seller</div>}
+                </div>
               </div>
             )) : [
               {title:'Write',desc:'Notebooks, journals and notepads.',icon:'◻',handle:'write'},

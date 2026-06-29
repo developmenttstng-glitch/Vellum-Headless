@@ -21,6 +21,14 @@ function CollectionView({ handle, onAddToCart, onViewProduct, onBack }) {
         .colv-hero {
           padding: 56px 0 40px; border-bottom: 1.5px solid var(--ink);
           background: var(--parch); position: relative; overflow: hidden;
+          min-height: 260px; display: flex; align-items: center;
+        }
+        .colv-hero-img {
+          position: absolute; inset: 0;
+          overflow: hidden;
+        }
+        .colv-hero-img img {
+          width: 100%; height: 100%; object-fit: cover; opacity: 0.12;
         }
         .colv-hero::before {
           content:'';position:absolute;inset:0;
@@ -77,7 +85,12 @@ function CollectionView({ handle, onAddToCart, onViewProduct, onBack }) {
 
       <div className="colv">
         <div className="colv-hero">
-          <div className="container">
+          {collection.image && (
+            <div className="colv-hero-img">
+              <img src={collection.image.url} alt={collection.title}/>
+            </div>
+          )}
+          <div className="container" style={{position:'relative',zIndex:1}}>
             <button className="colv-back" onClick={onBack}>← All Collections</button>
             <h1 className="colv-title">{collection.title}</h1>
             {collection.description && <p className="colv-desc">{collection.description}</p>}
@@ -154,10 +167,19 @@ export default function CollectionsPage({ collections, onNav, onAddToCart, onVie
           padding:40px 32px;border-right:1.5px solid var(--ink);
           cursor:pointer;transition:background 0.2s;position:relative;
           border-top:1.5px solid var(--ink);background:var(--cream);
-          min-height:320px;
+          min-height:320px; overflow:hidden;
         }
         .cp-card:last-child { border-right:none; }
         .cp-card:hover { background:var(--cream-dk); }
+        .cp-card-img {
+          position:absolute;inset:0;pointer-events:none;
+        }
+        .cp-card-img img {
+          width:100%;height:100%;object-fit:cover;
+          opacity:0.08;transition:opacity 0.3s;
+        }
+        .cp-card:hover .cp-card-img img { opacity:0.14; }
+        .cp-card-content { position:relative;z-index:1; }
         .cp-num {
           font-family:var(--type);font-size:10px;letter-spacing:0.2em;
           color:var(--ink-xs);margin-bottom:14px;
@@ -198,13 +220,20 @@ export default function CollectionsPage({ collections, onNav, onAddToCart, onVie
         <div className="cp-grid">
           {display.length > 0 ? display.map((col,i) => (
             <div className="cp-card" key={col.id} onClick={() => onNav('collection',col.handle)}>
-              <div className="cp-num">0{i+1} / {col.title}</div>
-              <div className="cp-icon">{['◻','◇','○','◈'][i%4]}</div>
-              <div className="cp-name">{col.title}</div>
-              <div className="cp-desc">{col.description || 'Explore this collection.'}</div>
-              <div className="cp-link">Browse →</div>
-              {i===0 && <div className="cp-stamp">New<br/>Stock</div>}
-              {i===3 && <div className="cp-stamp">Best<br/>Seller</div>}
+              {col.image && (
+                <div className="cp-card-img">
+                  <img src={col.image.url} alt={col.title}/>
+                </div>
+              )}
+              <div className="cp-card-content">
+                <div className="cp-num">0{i+1} / {col.title}</div>
+                <div className="cp-icon">{['◻','◇','○','◈'][i%4]}</div>
+                <div className="cp-name">{col.title}</div>
+                <div className="cp-desc">{col.description || 'Explore this collection.'}</div>
+                <div className="cp-link">Browse →</div>
+                {i===0 && <div className="cp-stamp">New<br/>Stock</div>}
+                {i===3 && <div className="cp-stamp">Best<br/>Seller</div>}
+              </div>
             </div>
           )) : [
             {handle:'write',title:'Write',desc:'Notebooks, journals and notepads for every kind of writer.',icon:'◻'},
